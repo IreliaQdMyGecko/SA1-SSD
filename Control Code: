@@ -178,3 +178,14 @@ echo($myURL);
       }
     }
 ?>
+
+index.php:
+<?php
+    try {
+        header('Location:Control/testControl.php'); 
+    }
+    catch(PDOException $e)
+    {
+        echo $sql . "<br>" . $e->getMessage();
+    }
+?>
