@@ -1,0 +1,649 @@
+commonFunc.php:
+<?php
+class CommonFunctions {
+  function __construct() {
+    session_start();
+  }
+  private function runCurl($url, $add_item)
+  {
+    try
+    {
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_POST, true );
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $add_item);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($curlObject, CURLOPT_POST_FAILONERROR, true);
+      $result = curl_exec($ch):
+      if(curl_errno($ch))
+      {
+
+      }
+      curl_close($ch);
+      return $result;
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  private function returnError($reason)
+  {
+    try
+    {
+      $add_array=array();
+      $add_item = array(
+        "result" => 'fail',
+        "userID" => "0",
+        "accessLevel" => "",
+        "firstName" => $reason,
+        "lastName" => "",
+      );
+      array_push($add_array, $add_item);
+      return json_encode($add_array);
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+  public function redirect($url)
+  {
+    try
+    {
+      if(!headers_sent())
+      {
+        header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/' . $url);
+      }
+      else
+      {
+        die("Could not Redirect, Headers already sent");
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+  private function getControlURL()
+  {
+	#	return "https://globalpattern-anagramsalsa-3000.codio.io/Control/ControlAPI.php";
+    return "https://papergoblin-logiclily-3000.codio.io/Model/ModelAPI.php";
+	}
+
+  public function logInRequest()
+  {
+    try
+    {
+      $url = $this->getControlURL();
+      $userRequest = array("actionCall"=>"logIn","email"=>$email,"password"=>$password);
+      $jsonDataEncoded = json_encode($userRequest);
+      return $this->runCurl($url, $jsonDataEncoded);
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  public function getAllUsers($accessLevel)
+  {
+    try
+    {
+      $accessLevel = $_SESSION['accessLevel'];
+      if($accessLevel==1)
+      {
+        $url = $this->getControlURL();
+        $userRequest = array("actionCall"=>"getUsers");
+        $jsonDataEncoded = json_encode($userRequest);
+        return $this->runCurl($url, $jsonDataEncoded);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  public function getUserByID($accessLevel, $userID)
+  {
+    try
+    {
+      $accessLevel = $_SESSION['accessLevel'];
+      if()
+      {
+        $url = $this->getControlURL();
+        $userRequest = array("actionCall"=>"getUserByID","userID"=>$userID);
+        $jsonDataEncoded = json_encode($userRequest);
+        return $this->runCurl($url, $jsonDataEncoded);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  public function updateIndividualUser($accessLevel, $userData)
+  {
+    try
+    {
+      $accessLevel = $_SESSION['accessLevel'];
+      if(($accessLevel==1)
+      {
+        $url = $this->getControlURL();
+        return $this->runCurl($url, $userData);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    } 
+  }
+
+  public function DeleteUser($accessLevel, $userID)
+  {
+    try
+    {
+      $accessLevel = $_SESSION['accessLevel'];
+      if(($accessLevel==1)
+      {
+        $url = $this->getControlURL();
+        $userRequest = array("actionCall"=>"DeleteUser","userID"=>$userID);
+        $jsonDataEncoded = json_encode($userRequest);
+        return $this->runCurl($url, $userData);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  public function addUser($accessLevel, $userData)
+  {
+    try
+    {
+      $accessLevel = $_SESSION['accessLevel'];
+      if(accessLevel==1)
+      {
+        $url = $this->getControlURL;
+        return $this->runCurl($url, $userData);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  public function getAllFileData()
+  {
+    try
+    {
+      $accessLevel = $_SESSION['accessLevel'];
+      if(accessLevel==1)
+      {
+        $url = $this->getControlURL;
+        $fileRequest = array("actionCall"=>"getAllFileData");
+        return $this->runCurl($url, $fileRequest);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  public function getFileDatabyID($accessLevel, $postID)
+  {
+    try
+    {
+      $accessLevel = $_SESSION['accessLevel'];
+      if()
+      {
+        $url = $this->getControlURL();
+        $fileRequest=array(
+          "actionCall"=>"getFileDatabyID",
+          "postID"=>$postID
+        );
+        return $this->runCurl($url, $fileRequest);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  public function insertNewFile($accessLevel, $fileTitle, $threadID, $userID)
+  {
+    try
+    {
+      $accessLevel = $_SESSION['accessLevel'];
+      if($accessLevel==1)
+      {
+        $url = $this->getControlURL;
+        $cf = new CURLFile($fileName);
+        
+        $fileRequest = array(
+          "actionCall" => "insertNewFile",
+          "accessLevel"=> $_SESSION['accessLevel'],
+          "userID" => $userID,
+          "threadID" => $threadID,
+          "FileTitle" => $cf,
+          "command" = $content
+        );
+        $result = $this->runCurl($url, $fileRequest);
+        unlink("../tempFiles/".$fileTitle);
+        return $result;
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  public function deleteFile($accessLevel, $fileTitle)
+  {
+    try
+    {
+      $accessLevel = $_SESSION['accessLevel'];
+      if($accessLevel==1)
+      {
+        $url = $this->getControlURL();
+        $fileRequest = array(
+          "actionCall"=>"deleteFile",
+          "fileTitle"=>$fileTitle
+        );
+        return $this->runCurl($url, $fileRequest);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+}
+?>
+
+login.php:
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>SA01 Login Page</title>
+  </head>
+  <style>
+    form {
+      margin: 25px auto;
+      padding: 20px;
+      border: 5px solid #ccc;
+      width: 500px;
+      background: #eee;
+      text-align: center;
+      }
+    h1 {
+    text-align: center;
+    font-family: Verdana, sans-serif;
+    font-size: 2.0rem;
+    color: darkgrey;
+    }
+    h2 {
+    text-align: center;
+    font-family: Verdana, sans-serif;
+    font-size: 0.9rem;
+    color: darkgrey;
+    }
+    h3 {
+    text-align: center;
+    font-family: Verdana, sans-serif;
+    font-size: 1.0rem;
+    color-:#212121;
+    }
+    .logElement {
+      border: 2px solid #ccc;
+      font-size: 0.8rem;
+      font-family: Verdana, sans-serif;
+      padding: 10px;
+      margin: 10px;
+      }
+    .logLabel {
+      width: 175px;
+      display: inline-block;
+      text-align: left;
+      font-size: 1.0rem;
+      font-family: Verdana, sans-serif;
+      }
+      .logButton {
+      font-size: 1.0rem;
+      font-family: Verdana, sans-serif;
+      margin: 10px;
+      width: 100px;
+      background: darkgrey;
+      }
+  </style>
+  <body>
+    <h1>SA01 Social Media Site</h1>
+    <h2>Created by Thomas Hughes 347299</h2>
+      <form method="post" action="userLoginTransaction.php" name="signin-form">
+        <div class="form-element">
+          <label class="logLabel">Account Email</label>
+          <input class="logElement" type="email" name="email" maxlength="255" value="" required />
+        </div>
+        <div class="form-element">
+          <label class="logLabel">Account Password</label>
+          <input class="logElement" type="password" name="password" maxlength="50" minlength ="8" required />
+        </div>
+        <button class="logButton" type="submit" name="login" value="login">Log In</button>
+        <button class="logButton" type="reset" name="cancel" value="Cancel">Cancel</button>
+      </form>
+      <a href = "https://sofiaversion-nancychamber-3000.codio.io/View/userPage/userHome.php">Click here</a>
+  </body>
+</html>
+
+userLoginTransaction.php:
+<?php
+try
+{
+  require_once '../commonFiles/commonFunc.php'; //Gets access to the commonFunctions
+  $commFunc = new CommonFunctions(); //creates the common function object.
+}
+catch(PDOException $e)
+{
+  echo("Error Written To ErrorLog");
+  try
+  {
+    $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!"); //Opens the error log file
+    $errorTxt = "Error Found:" . $e->getMessage() . "\n"; //Creates the errorText by gathering the PDOException error
+    fwrite($errorLog, $errorTxt);//Writes to errorLog if any error is caught
+    fclose($errorLog); //closes the errorLog
+  }
+  catch(PDOException $e)
+  {
+    echo $sql . "<br>" . $e->getMessage();
+  }
+}
+
+try
+{
+  if(isset($_REQUEST['action']))
+  {
+    switch($_REQUEST['action'])
+    {
+      case 'Log In':
+        if(isset($_POST['email']) and isset($_POST['password']))
+        {
+          $sha1Value = sha1($_POST['password']);
+          if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) === false)
+          {
+            $logInResult = $commFunc->logInRequest($_POST['email'], $sha1Value);
+            $result = json_decode($logInResult);
+            try
+            {
+              if($result[0]->result !="fail")
+              {
+                session_start();
+                $_SESSION['userID'] = $result[0]->userId;
+                $_SESSION['accessLevel'] = $result[0]->accessLevel;
+                $_SESSION['first_Name'] = $result[0]->firstName;
+                $_SESSION['last_Name'] = $result[0]->lastName;
+
+                $commFunc->redirect("../userPage/userHome.php");
+              }
+              else
+              {
+                if($result[0]->userId == "0")
+                {
+                  $location="Control";
+                  $location2="this";
+                  $location3="commonFunc.php"
+
+                  if($result[0]->firstName =="model")
+                  {
+                    $location="Model";
+                    $location2="Control";
+                    $location3="ControlAPI.php"
+                  }
+                }
+                else
+                {
+                  $commFunc->redirect('logIn.php');
+                }
+              }
+            }
+            catch(PDOException $e)
+            {
+              echo("Error Written To ErrorLog");
+              try
+              {
+                $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");//Opens the error log file
+                $errorTxt = "Error Found:" . $e->getMessage() . "\n";//Creates the errorText by gathering the PDOException error
+                fwrite($errorLog, $errorTxt);//Writes to errorLog if any error is caught
+                fclose($errorLog);//closes the errorLog
+                $commFunc->redirect('logIn.php');//calls the object and calls the redirect function
+              }
+              catch(PDOException $e)
+              {
+                 echo $sql . "<br>" . $e->getMessage();
+              } 
+            }
+          }
+          else
+          {
+            $commFunc->redirect('logIn.php');
+          }
+          break;
+        }
+        #============================================================================================================================
+        case 'Logout':
+          session_start();
+          session_unset();
+          session_destroy();
+          $commFunc->redirect('logIn.php');
+          break;
+        #============================================================================================================================
+        case 'Cancel':
+          session_start();
+          session_unset();
+          session_destroy();
+          $commFunc->redirect('logIn.php');
+          break;
+    }
+  }
+}
+catch(PDOException $e)
+{
+  echo("Error Written To ErrorLog");
+  try
+  {
+    $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");//Opens the error log file
+    $errorTxt = "Error Found:" . $e->getMessage() . "\n";//Creates the errorText by gathering the PDOException error
+    fwrite($errorLog, $errorTxt);//Writes to errorLog if any error is caught
+    fclose($errorLog);//closes the errorLog
+  }
+  catch(PDOException $e)
+  {
+    echo $sql . "<br>" . $e->getMessage();
+  }
+}
+?>
+
+header.php:
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../commonFiles/styles.css">
+    <title>SA01 Website</title>
+  </head>
+  <body>
+  <div class="row">
+    <button class="logout" type="url" name="logout" value="logout">Logout</button>
+  </div>
+  
+footer.php:
+<?php
+echo('
+    <div class="rowbottom"> SA01 Website </div>
+  </body>
+</html>')
+?>
+
+index.php:
+<?php
+    try 
+	  {
+      header('Location:View/log-in/logIn.php');
+    }
+    catch(PDOException $e)
+    {
+        echo $sql . "<br>" . $e->getMessage();
+    }
+?>
