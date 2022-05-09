@@ -1,5 +1,4 @@
 configure.php:
-```
 <?php
 require_once 'conn.php';
 require_once 'resetTables.php';
@@ -28,10 +27,9 @@ catch (PDOException $error)
   require_once 'populateTables.php';
 }
 ?>
-```
 
 conn.php:
-```
+
 <?php
      //this file connects any calling page to the database
 $DBhost = 'localhost';
@@ -48,10 +46,10 @@ $DBname = 'modelDb';
         die($ex->getMessage());
     }
 ?>
-```
+
 
 populateTables.php:
-```
+
 <?php
 require_once 'conn.php';
 try 
@@ -293,10 +291,10 @@ catch(PDOException $e)
   #*******************************************************************************
   //echo('Tables Have Been Populated');
 ?>
-```
+
 
 resetTables.php:
-```
+
 <?php
 
 require_once 'conn.php';
@@ -374,7 +372,7 @@ catch(PDOException $e)
   echo $sql . "<br>" . $e->getMessage();
 }
 ?>
-```
+
 
 ModelAPI.php:
 <?php
@@ -849,7 +847,7 @@ catch(PDOException $e)
 ?>
 
 index.php:
-```
+
 <?php
 require_once('Model/database/configure.php');
 try{
@@ -864,4 +862,3 @@ catch(PDOException $e)
   echo $sql . "<br>" . $e->getMessage();
 }
 ?>
-```
