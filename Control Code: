@@ -1,0 +1,180 @@
+ControlAPI.php:
+<?php
+
+class Control {
+  function __construct() {
+    }
+ #*************************************************************************
+ #   Common functions
+ #*************************************************************************
+    #----------------------------------------------------------------------
+    // Use CURL to send data to the web service API via HTTP(S) POST command
+    #----------------------------------------------------------------------
+		public function runCurl($url, $add_item)
+    {	
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS,$add_item);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curlObject,CURLOPT_FAILONERROR,true);
+			$result = curl_exec($ch);//run the curl process
+			// Check for an error in the cURL process
+			if (curl_errno($ch)) { 
+				$result =  $this->returnError("model");
+			}
+			curl_close($ch);
+			return $result; 
+		}
+			
+    #----------------------------------------------------------------------
+		# creates a JSON array to return if there was a problem with the connection to the control's API
+    #----------------------------------------------------------------------
+    private function returnError($reason)
+    {
+			$add_arr=array();
+        $add_item = array(
+          "result" =>  'fail',
+          "userId" =>  "0",
+          "accessLevel" => "",
+          "firstName" =>$reason,
+          "lastName" => ""
+        );
+        array_push($add_arr, $add_item);
+				return json_encode($add_arr);
+		}
+   #----------------------------------------------------------------------
+    # This needs to be dynamic to support the random Codio name
+    # Normally the API URL would be fixed
+    #----------------------------------------------------------------------
+    private function getModelURL()
+    {
+        #Add the copied URL to the Model API";  
+        return "https://typenepal-incamiddle-3000.codio.io/Model/ModelAPI.php"; 		
+    }
+
+    private function getMyURL()
+  {
+    #Get the link to the Control API's URL
+    $YourAddress = $_SERVER['HTTP_HOST'];
+    #----------------------------------------------------------------------
+    $myURL = "https://".$YourAddress."/Control/ControlAPI.php";
+    return $myURL;
+  }
+  
+  private function runCurl($url, $encodedData)
+  {
+    try
+    {
+      $curlObject = curl_init();
+      curl_setopt($curlObject, CURLOPT_URL, $url);
+      curl_setopt($curlObject, CURLOPT_CUSTOMREQUEST, "POST");
+      curl_setopt($curlObject, CURLOPT_POSTFIELDS, $encodedData);
+      curl_setopt($curlObject, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($curlObject, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($encodedData))
+      );
+      $result = curl_exec($curlObject);
+      curl_close($curlObject);
+      return $result;
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+
+  private function testControlAPI($email, $password)
+  {
+    try
+    {
+      $url = $this->getMyURL();
+      echo("<script> function copyURL(el) {	
+				var range, sel;
+				range = document.createRange();
+				sel = window.getSelection();
+				sel.removeAllRanges();
+				range.selectNodeContents(el);
+				sel.addRange(range);
+				document.execCommand('copy');}	</script>");
+        echo("<p>Connecting to <b><span id='connectionURL' contenteditable='true'>".$url."</span></b> <button onclick='copyURL(connectionURL)'>Copy the Control's URL </button></p>");
+
+        $newRequest = array("actionCall"=>"logIn","email"=>$email,"password"=>$password);
+        $jsonDataEncoded = json_encode($newRequest);
+        return $this->runCurl($url, $jsonDataEncoded);
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+  
+testControl.php:
+<?php
+$YourAddress = $_SERVER['HTTP_HOST'];
+#----------------------------------------------------------------------
+$myURL = "https://".$YourAddress."/Control/ControlAPI.php";
+echo($myURL);
+#Starting API Script
+  $commFunc = new CommonFunctions();
+
+  $shal1Value = sha1('User1Password');
+  $testControlAPIResult = $commonTasksObj->testControlAPI("User1@email.com", $shal1Value);
+  $result = json_decode($testControlAPIResult);
+  echo("<h2>Testing Control API</h2><p>User 1's Data should be displayed</p>")
+
+  try
+  {
+    if($result[0]->result !="fail")
+    {
+      session_start();
+      echo('userID'.$result[0]->userID."<br>");
+      echo('accessLevel'.$result[0]->accessLevel."<br>");
+      echo('first_name'.$result[0]->first_name."<br>");
+      echo('last_name'.$result[0]->last_name."<br>");
+    }
+    else
+    {
+      echo("Model Not Accessible");
+    }
+  }
+  catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+        echo("no user found for the given username and password");
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+?>
