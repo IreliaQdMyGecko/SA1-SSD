@@ -1,0 +1,867 @@
+configure.php:
+```
+<?php
+require_once 'conn.php';
+require_once 'resetTables.php';
+try
+{
+  //The two lines below are there to check if the table exists to stop overwriting data
+  $sql = "SELECT * FROM User_Account";
+  $result = $DBcon->query($sql);
+  //The below lines are there if there is no entries within the tables
+  if ($row = $result->fetch($result) == false)
+  {
+    echo json_encode("No Entries Within Table - Repopulating tables");
+    require_once 'populateTables.php';
+  }
+  else
+  {
+    echo json_encode("Tables are populated");
+  }
+}
+catch (PDOException $error)
+{
+  //The lines below are only used if it does not contain any tables
+  echo json_encode("No Tables Found, Creating tables and populating data");
+  echo ($error);
+  require_once 'resetTables.php';
+  require_once 'populateTables.php';
+}
+?>
+```
+
+conn.php:
+```
+<?php
+     //this file connects any calling page to the database
+$DBhost = 'localhost';
+$DBuser = 'dbUser';
+$DBpassword = 'dbPassword';
+$DBname = 'modelDb';
+    try
+    {
+        $DBcon = new PDO("mysql:host=$DBhost;dbname=$DBname",$DBuser,$DBpassword);
+        $DBcon->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+    catch(PDOException $ex)
+    {
+        die($ex->getMessage());
+    }
+?>
+```
+
+populateTables.php:
+```
+<?php
+require_once 'conn.php';
+try 
+{
+  #********************************Insert Into Users*****************************
+  ini_set('date.timezone', 'Europe/London');
+  $userName = "User1";
+  $userPassword = sha1("User1Password");
+  $first_name = "User";
+  $last_name = "One";
+  $email = "User1@email.com";
+  $created = date("Y-m-d H:i:s",time());
+  $accessLevel = "1";
+  $sql = "INSERT IGNORE INTO User_Account VALUES (NULL, '$userName', '$userPassword', '$first_name', '$last_name', '$email', '$created', $accessLevel)";
+	$DBcon->exec($sql);
+} 
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $userName = "User2";
+  $userPassword = sha1("User2Password");
+  $first_name = "User";
+  $last_name = "Two";
+  $email = "User2@email.com";
+  $created = date("Y-m-d H:i:s",time());
+  $accessLevel = "2";
+  $sql = "INSERT IGNORE INTO User_Account VALUES (NULL, '$userName', '$userPassword', '$first_name', '$last_name', '$email', '$created', $accessLevel)";
+	$DBcon->exec($sql);
+} 
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $userName = "User3";
+  $userPassword = sha1("User3Password");
+  $first_name = "User";
+  $last_name = "Three";
+  $email = "User@email.com";
+  $created = date("Y-m-d H:i:s",time());
+  $accessLevel = "3";
+  $sql = "INSERT IGNORE INTO User_Account VALUES (NULL, '$userName', '$userPassword', '$first_name', '$last_name', '$email', '$created', $accessLevel)";
+	$DBcon->exec($sql);
+} 
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $userName = "User4";
+  $userPassword = sha1("User4Password");
+  $first_name = "User";
+  $last_name = "Four";
+  $email = "User4@email.com";
+  $created = date("Y-m-d H:i:s",time());
+  $accessLevel = "3";
+  $sql = "INSERT IGNORE INTO User_Account VALUES (NULL, '$userName', '$userPassword', '$first_name', '$last_name', '$email', '$created', $accessLevel)";
+	$DBcon->exec($sql);
+} 
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $userName = "User5";
+  $userPassword = sha1("User5Password");
+  $first_name = "User";
+  $last_name = "Five";
+  $email = "User5@email.com";
+  $created = date("Y-m-d H:i:s",time());
+  $accessLevel = "1";
+  $sql = "INSERT IGNORE INTO User_Account VALUES (NULL, '$userName', '$userPassword', '$first_name', '$last_name', '$email', '$created', $accessLevel)";
+	$DBcon->exec($sql);
+} 
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #********************************Insert Into Thread*****************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $threadSubject = 'Technology';
+  $created = date("Y-m-d H:i:s",time());
+  $userID = '1';
+  $threadStatus = '1';
+  $sql = "INSERT IGNORE INTO Thread VALUES (NULL, '$threadSubject','$created','$userID','$threadStatus')";
+  $DBcon->exec($sql);
+  }
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $threadSubject = 'Education';
+  $created = date("Y-m-d H:i:s",time());
+  $userID = '2';
+  $threadStatus = '1';
+  $sql = "INSERT IGNORE INTO Thread VALUES (NULL, '$threadSubject','$created','$userID','$threadStatus')";
+  $DBcon->exec($sql);
+  }
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $threadSubject = 'Travel';
+  $created = date("Y-m-d H:i:s",time());
+  $userID = '2';
+  $threadStatus = '0';
+  $sql = "INSERT IGNORE INTO Thread VALUES (NULL, '$threadSubject','$created','$userID','$threadStatus')";
+  $DBcon->exec($sql);
+  }
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $threadSubject = 'Economics';
+  $created = date("Y-m-d H:i:s",time());
+  $userID = '4';
+  $threadStatus = '0';
+  $sql = "INSERT IGNORE INTO Thread VALUES (NULL, '$threadSubject','$created','$userID','$threadStatus')";
+  $DBcon->exec($sql);
+  }
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+
+  #********************************Insert Into Post*****************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in ligula eu nisi rutrum rutrum quis a nulla.';
+  $fileTitle = 'image.jpeg';
+  $created = date("Y-m-d H:i:s",time());
+  $threadID = '3';
+  $userID = '4';
+  $postStatus = "1";
+  $sql = "INSERT IGNORE INTO Post VALUES (NULL,'$content','$fileURL','$created','$threadID','$userID', '$postStatus')";
+  $DBcon->exec($sql);
+  }
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in ligula eu nisi rutrum rutrum quis a nulla.';
+  $fileTitle= 'image2.jpeg';
+  $created = date("Y-m-d H:i:s",time());
+  $threadID = '2';
+  $userID = '3';
+  $postStatus = "1";
+  $sql = "INSERT IGNORE INTO Post VALUES (NULL, '$content', '$fileURL', '$created', '$threadID', '$userID', '$postStatus')";
+  $DBcon->exec($sql);
+  }
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in ligula eu nisi rutrum rutrum quis a nulla.';
+  $fileTitle = 'image3.jpeg';
+  $created = date("Y-m-d H:i:s",time());
+  $threadID = '2';
+  $userID = '2';
+  $postStatus = "1";
+  $sql = "INSERT IGNORE INTO Post VALUES (NULL, '$content', '$fileURL', '$created', '$threadID', '$userID', '$postStatus')";
+  $DBcon->exec($sql);
+  }
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in ligula eu nisi rutrum rutrum quis a nulla.';
+  $created = date("Y-m-d H:i:s",time());
+  $threadID = '1';
+  $userID = '1';
+  $postStatus = "1";
+  $sql = "INSERT IGNORE INTO Post VALUES (NULL, '$content', NULL ,'$created', '$threadID', '$userID', '$postStatus')";
+  $DBcon->exec($sql);
+  }
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+try 
+{
+  ini_set('date.timezone', 'Europe/London');
+  $content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in ligula eu nisi rutrum rutrum quis a nulla.';
+  $created = date("Y-m-d H:i:s",time());
+  $threadID = '4';
+  $userID = '2';
+  $postStatus = "1";
+  $sql = "INSERT IGNORE INTO Post VALUES (NULL, '$content', NULL ,'$created', '$threadID', '$userID', '$postStatus')";
+  $DBcon->exec($sql);
+  }
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+  #*******************************************************************************
+  //echo('Tables Have Been Populated');
+?>
+```
+
+resetTables.php:
+```
+<?php
+
+require_once 'conn.php';
+try
+{
+  $sql = "DROP TABLE Post";
+  $stmt = $DBcon->prepare($sql);
+  $stmt->execute();
+
+  $sql = "DROP TABLE Thread";
+  $stmt = $DBcon->prepare($sql);
+  $stmt->execute();
+
+  $sql = "DROP TABLE User_Account";
+  $stmt = $DBcon->prepare($sql);
+  $stmt->execute(); 
+}
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+  try
+  {
+     $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+     $errorTxt = "Error Found: " . $e->getMessage() . "\n";
+     fwrite($errorLog, $errorTxt);
+     fclose($errorLog);
+  }
+  catch(PDOException $e)
+  {
+    echo $sql . "<br>" . $e->getMessage();
+  }
+}
+
+try 
+{
+	
+  $sql = "CREATE TABLE IF NOT EXISTS User_Account (
+    userID int(3) AUTO_INCREMENT PRIMARY KEY,
+    userName varchar(100) NOT NULL,
+    userPassword varchar(100) NOT NULL,
+    first_name varchar(50) NOT NULL,
+    last_name varchar(50) NOT NULL,
+    email varchar(254) NOT NULL,
+    created datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    accessLevel int(1) NOT NULL
+    )";
+  $DBcon -> exec($sql);
+  //
+  $sql = "CREATE TABLE IF NOT EXISTS Thread (
+    threadID int(3) AUTO_INCREMENT PRIMARY KEY,
+    threadSubject varchar(100) NOT NULL,
+    created datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    userID int(3),
+    threadStatus int(1) NOT NULL,
+    FOREIGN KEY (userID) REFERENCES User_Account(userID)
+    )";
+  $DBcon -> exec($sql);
+  //
+  $sql = "CREATE TABLE IF NOT EXISTS Post (
+    postID int(3) AUTO_INCREMENT PRIMARY KEY,
+    content varchar(255) NOT NULL,
+    fileTitle varchar(255),
+    created datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    threadID int(3),
+    userID int(3),
+    PostStatus int(1) NOT NULL,
+    FOREIGN KEY (threadID) REFERENCES Thread(threadID),
+    FOREIGN KEY (userID) REFERENCES User_Account(userID)
+    )";
+  $DBcon -> exec($sql);
+
+}
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+?>
+```
+
+ModelAPI.php:
+<?php
+require_once('database/configure.php');
+class Model {
+  # Common Functions
+  private function getURL(){
+    $URLAddress = $_SERVER['HTTP_HOST'];
+    $myURL = "https://".$URLAddress."/Model/";
+    return $myURL;
+  }
+
+  #User Management Functions
+
+  #Log In Request
+  #=======================================================================================================================================
+  public function logInRequest($Dbase,$email,$password)
+  {
+    $sql = "SELECT * FROM User_Account WHERE email='$email' AND userPassword='$password'";
+    $returnUser = $Dbase->query($sql);
+    $row = $returnUser -> fetch();
+    try
+    {
+      if($row)
+      {
+        $creatingArray=array();
+        $addingItem= array(
+          "result" => 'passed'
+          "userId" = $row['UserId'],
+          "accessLevel" => $row['accessLevel'],
+          "firstName" => $row['first_name'],
+          "lastName" => $row['last_name']
+        );
+        array_push($creatingArray,$addingItem);
+        return json_encode($creatingArray);
+      }
+      else
+      {
+        $creatingArray=array();
+        $addingItem= array("result" => 'fail');
+        array_push($creatingArray, $addingItem);
+        echo json_encode($creatingArray);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+#get all users from database
+#=======================================================================================================================================
+  public function getAllUsers($Dbase)
+  {
+    $sql = "SELECT * FROM User_account";
+    $Users = $DBase->query($sql);
+    $add_array=array();
+    try
+    {
+      if ($Users->rowCount() > 0)
+      {
+        while($row = $Users->fetch())
+        {
+        $add_item = array(
+          "userID" => $row['userID'],
+          "userName" => $row['userName'],
+          "userPassword" => $row['userPassword'],
+          "first_name" => $row['first_name'],
+          "last_name" => $row['last_name'],
+          "created" => $row['created'],
+          "accessLevel" => $row['accessLevel']
+          );
+        array_push($add_array, $add_item);
+        }
+      } 
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+    return json_encode($add_array);
+  }
+#get user data by a identified ID
+#=======================================================================================================================================
+  public function getUserByID($Dbase, $userID)
+  {
+    $sql = "SELECT * FROM User_Account WHERE userID ='$user'";
+    $users = $Dbase->query($sql);
+    $add_array=array();
+    try
+    {
+      if($users->rowCount() > 0)
+      {
+        while($row = $users->fetch())
+        {
+          $add_item = array(
+            "userID" => $row['userID'],
+            "userName" => $row['userName'],
+            "userPassword" => $row['userPassword'],
+            "first_name" => $row['first_name'],
+            "last_name" => $row['last_name'],
+            "created" => $row['created'],
+            "accessLevel" => $row['accessLevel']
+          );
+          array_push($add_array, $add_item);
+        }
+        return json_encode($add_array);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+#get user data by a identified ID
+#=======================================================================================================================================
+  public function UpdateIndividualUser($Dbase, $userData)
+  {
+    $sql = "UPDATE User_Account".
+    "SET userName = '".$userData->userName."',
+    userPassword = '".$userData->userPassword."',
+    first_name = '".$userData->first_name."',
+    last_name = '".$userData->last_name."',
+    accessLevel = '".$userData->accessLevel."'
+    WHERE userID = ".$userData->userID;
+    try
+    {
+       $Dbase->exec($sql);
+       $add_array=array();
+       $add_item = array("result" => true);
+       array_push($add_array, $add_item);
+       echo json_encode($add_array);
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+#get user data by a identified ID
+#=======================================================================================================================================
+  public function DeleteUser($DBase, $userData)
+  {
+    $sql = "DELETE FROM User_account WHERE userID = ".$userData->userID;
+    try
+    {
+      $Dbase->exec($sql);
+      $add_array=array();
+      $add_item = array("result" => true);
+      array_push($add_array, $add_item);
+      echo json_encode($add_array);
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+#get user data by a identified ID
+#===============================================================================================================================================================================================================================================================
+  public function addUser($accessLevel, $userData)
+  {
+    try
+    {
+      $sql = "INSERT IGNORE INTO User_Account VALUES (NULL,'".$userData->userName."','".$userData->userPassword."','".$userData->first_name."','".$userData->last_name."','".$userData->email."','".$userData->created."','".$userData->accessLevel."')";
+      $Dbase->exec($sql);
+      $add_array=array();
+      $add_item = array("result" => true);
+      array_push($add_array, $add_item);
+      echo json_encode($add_array);
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+        $DBase->exec($sql);
+        $add_array=array();
+        $add_item = array("result" => false);
+        array_push($add_array, $add_item);
+        echo json_encode($add_array);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+#File Management Functions
+#get user data by a identified ID
+#===============================================================================================================================================================================================================================================================
+  public function getAllFileData($DBase)
+  {
+    try
+    {
+      $sql = "SELECT * FROM Post WHERE fileURL<>'NULL'";
+      $files = $DBase->query($sql);
+      $add_array=array();
+      if($files->rowCount() > 0 )
+      {
+        while ($row = $files->fetch())
+        {
+          $add_item = array(
+            "postID" => $row['postID'],
+            "content" => $row['content'],
+            "fileTitle" => $row['fileTitle'],
+            "created" => $row['created'],
+            "threadID" => $row['threadID'],
+            "userID" => $row['userID'],
+            "postStatus" => $row['postStatus']
+          );
+          array_push($add_array, $add_item);
+        }
+        return json_encode($add_array);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+#get user data by a identified ID
+#=======================================================================================================================================
+  public function getFileDatabyID($Dbase, $PostID)
+  {
+    try
+    {
+      $sql = "SELECT * FROM Post WHERE fileURL<>'NULL' AND PostID = '$PostID'";
+      $file = $Dbase->query($sql);
+      $add_array=array();
+      if ($file->rowCount() > 0)
+      {
+        $row = $file->fetch();
+        $location = 'siteFiles/user'.$row['usedID'].'/'.$row['fileName'];
+        $add_item = array(
+          "PostID" => $row['PostID'],
+          "content" => $row['content'],
+          "fileTitle" => $row['fileTitle'],
+          "threadID" => $row['threadID'],
+          "userID" => $row['userID'],
+          "PostStatus" => $row['PostStatus'],
+          "fileURL" =>$this->getMyURL().'/'.$location
+        );
+        array_push($add_array, $add_item);
+        return json_encode($add_array);
+      }
+    }
+    catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+  }
+#get user data by a identified ID
+#=======================================================================================================================================
+public function insertNewFile($Dbase, $fileTitle, $threadID, $userID)
+{
+  try
+  {
+    ini_set('date.timezone', 'Europe/London');
+    $created = date("Y-m-d H:i:s",time());
+    $postStatus = '1';
+    $sql = "INSERT IGNORE INTO Post(NULL, '$content', '$fileTitle' , '$created', '$threadID', '$userID', '$postStatus')";
+    $Dbase->exec($sql);
+    return true;
+  }
+  catch(PDOException $e)
+    {
+      echo("Error Written To ErrorLog");
+      try
+      {
+        $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+        $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+        fwrite($errorLog, $errorTxt);
+        fclose($errorLog);
+        return false;
+      }
+      catch(PDOException $e)
+      {
+        echo $sql . "<br>" . $e->getMessage();
+      }
+    }
+}
+#get user data by a identified ID
+#=======================================================================================================================================
+public function deleteFile($DBase, $fileTitle)
+{
+  try
+  {
+    $sql = "SELECT + FROM Post WHERE fileTitle = ".$fileTitle;
+    $file = $Dbase->query($sql);
+    if($file->rowCount() > 0)
+    {
+      $row = $file->fetch();
+      "fileTitle" => $row['fileTitle'];
+      "userID" => $row['userID'];
+    }
+    unlink("siteFiles/user". $userID.'/'.$fileTitle);
+    $sql = "DELETE FROM Post WHERE fileTitle = ".$FileTITLE;
+    $DBase->exec($sql);
+    $feedback = array("success" => true);
+    echo json_encode($feedback);
+  }
+  catch(PDOException $e)
+  {
+    echo("Error Written To ErrorLog");
+    try
+    {
+      $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+      $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+      fwrite($errorLog, $errorTxt);
+      fclose($errorLog);
+      $feedback = array("failure" => false);
+      echo json_encode($feedback);
+    }
+    catch(PDOException $e)
+    {
+      echo $sql . "<br>" . $e->getMessage();
+    }
+  }
+}
+
+#EXTRACTING the POST requests alongside calling functions
+#=======================================================================================================================================
+$modelObj = new Model();
+$jsonContents = json_decode(file_get_contents('php://input'));
+try
+{
+  if($jsonContents->actionCall)
+  {
+    switch($jsonContents->actionCall)
+    {
+      case 'logInRequest':
+        echo $modelObj->logInRequest($DBcon, $jsonContents->email, $jsonContents->password);
+        break;
+      case 'getAllUsers':
+        echo $modelObj->getAllUsers($DBcon);
+        break;
+      case 'getUserByID':
+        echo $modelObj->getUserByID($DBcon,$jsonContents->userID);
+        break;
+      case 'UpdateIndividualUser':
+        echo $modelObj->UpdateIndividualUser($DBcon, $jsonContents);
+        break;
+      case 'DeleteUser':
+        echo $modelObj->DeleteUser($DBcon, $jsonContents);
+        break;
+      case 'addUser':
+        echo $modelObj->addUser($DBcon, $jsonContents);
+        break;
+    }
+  }
+  else
+  {
+    if($_POST['actionCall')
+    {
+      switch($_POST['actionCall')
+      {
+        case 'getAllFileData':
+          echo $modelObj->getAllFileData($DBcon);
+          break;
+        case 'getFileDatabyID':
+          echo $modelObj->getFileDatabyID($DBcon, $_POST["PostID"]);
+          break;
+        case 'insertNewFile':
+          echo $modelObj->insertNewFile($DBcon, $_POST["fileTitle"], $_POST["threadID"], $_POST["userID"]);
+          break;
+        case 'deleteFile':
+          echo $modelObj->deleteFile($DBcon, $_POST["fileTitle"]);
+          break;
+      }
+    }
+    else
+    {
+      $reply = array("result" => "issue".$_POST['actionCall']);
+      echo json_encode($reply);
+    }
+  }
+}
+catch(PDOException $e)
+{
+  echo("Error Written To ErrorLog");
+  try
+  {
+    $errorLog = fopen("Model/errorLog/errorLog.log", "a") or die("Unable To Open File!");
+    $errorTxt = "Error Found:" . $e->getMessage() . "\n";
+    fwrite($errorLog, $errorTxt);
+    fclose($errorLog);
+  }
+  catch(PDOException $e)
+  {
+    echo $sql . "<br>" . $e->getMessage();
+  }
+}
+?>
+
+index.php:
+```
+<?php
+require_once('Model/database/configure.php');
+try{
+  echo("<h1>The Model</h1><p>The Model has started</p>");
+  # Provide the API's URL on the index page
+  $YourAddress = $_SERVER['HTTP_HOST'];
+  $controlAPIURL = "https://".$YourAddress."/Model/ModelAPI.php";
+  echo("<p >This Model's URL is <b><span id='connectionURL' contenteditable='true'>".$controlAPIURL."</span></b> <button onclick='copyURL(connectionURL)'>Copy the Model's URL</button></p>");
+}
+catch(PDOException $e)
+{
+  echo $sql . "<br>" . $e->getMessage();
+}
+?>
+```
